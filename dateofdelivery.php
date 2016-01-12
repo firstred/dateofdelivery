@@ -215,7 +215,7 @@ class DateOfDelivery extends Module
 		return $return;
 	}
 
-	private function _postProcess()
+	protected function _postProcess()
 	{
 		if (Tools::isSubmit('saturdaystatusdateofdelivery') && $id_carrier_rule = Tools::getValue('id_carrier_rule'))
 		{
@@ -305,7 +305,7 @@ class DateOfDelivery extends Module
 			$this->_html = $this->displayConfirmation($this->l('Carrier rule updated successfully'));
 	}
 
-	private function _getCarrierRulesWithCarrierName()
+	protected function _getCarrierRulesWithCarrierName()
 	{
 		return Db::getInstance()->executeS('
 		SELECT *
@@ -314,7 +314,7 @@ class DateOfDelivery extends Module
 		');
 	}
 
-	private function _getCarrierRule($id_carrier_rule)
+	protected function _getCarrierRule($id_carrier_rule)
 	{
 		if (!(int)$id_carrier_rule)
 			return false;
@@ -325,7 +325,7 @@ class DateOfDelivery extends Module
 		);
 	}
 
-	private function _getCarrierRuleWithIdCarrier($id_carrier)
+	protected function _getCarrierRuleWithIdCarrier($id_carrier)
 	{
 		if (!(int)($id_carrier))
 			return false;
@@ -336,7 +336,7 @@ class DateOfDelivery extends Module
 		);
 	}
 
-	private function _isCarrierRuleExists($id_carrier_rule)
+	protected function _isCarrierRuleExists($id_carrier_rule)
 	{
 		if (!(int)($id_carrier_rule))
 			return false;
@@ -347,7 +347,7 @@ class DateOfDelivery extends Module
 		);
 	}
 
-	private function _deleteByIdCarrierRule($id_carrier_rule)
+	protected function _deleteByIdCarrierRule($id_carrier_rule)
 	{
 		if (!(int)($id_carrier_rule))
 			return false;
@@ -357,7 +357,7 @@ class DateOfDelivery extends Module
 		);
 	}
 
-	private function _isAlreadyDefinedForCarrier($id_carrier, $id_carrier_rule = 0)
+	protected function _isAlreadyDefinedForCarrier($id_carrier, $id_carrier_rule = 0)
 	{
 		if (!(int)($id_carrier))
 			return false;
@@ -368,7 +368,7 @@ class DateOfDelivery extends Module
 		'.((int)$id_carrier_rule != 0 ? 'AND `id_carrier_rule` != '.(int)$id_carrier_rule : ''));
 	}
 
-	private function _updateSaturdayStatus($id_carrier_rule)
+	protected function _updateSaturdayStatus($id_carrier_rule)
 	{
 		if (!$this->_isCarrierRuleExists($id_carrier_rule))
 			return false;
@@ -383,7 +383,7 @@ class DateOfDelivery extends Module
 		return Db::getInstance()->execute($sql);
 	}
 
-	private function _updateSundayStatus($id_carrier_rule)
+	protected function _updateSundayStatus($id_carrier_rule)
 	{
 		if (!$this->_isCarrierRuleExists($id_carrier_rule))
 			return false;
@@ -405,7 +405,7 @@ class DateOfDelivery extends Module
 	 *
 	 * @return array|bool returns the min & max delivery date
 	 */
-	private function _getDatesOfDelivery($id_carrier, $product_oos = false, $date = null)
+	protected function _getDatesOfDelivery($id_carrier, $product_oos = false, $date = null)
 	{
 		if (!(int)$id_carrier)
 			return false;
