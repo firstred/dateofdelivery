@@ -42,8 +42,8 @@ class DateOfDelivery extends Module
 		$this->bootstrap = true;
 		parent::__construct();
 
-		$this->displayName = $this->l('Date of delivery');
-		$this->description = $this->l('Displays an approximate date of delivery');
+		$this->displayName = $this->trans('Date of delivery', array(), 'Modules.Dateofdelivery.Admin');
+		$this->description = $this->trans('Displays an approximate date of delivery', array(), 'Modules.Dateofdelivery.Admin');
 	}
 
 	public function install()
@@ -210,7 +210,7 @@ class DateOfDelivery extends Module
 		$id_carrier = (int)OrderInvoice::getCarrierId($order_invoice->id);
 		$return = '';
 		if (($dates_delivery = $this->_getDatesOfDelivery($id_carrier, $oos, $order_invoice->date_add)) && isset($dates_delivery[0][0]) && isset($dates_delivery[1][0]))
-			$return = sprintf($this->l('Approximate date of delivery is between %1$s and %2$s'), $dates_delivery[0][0], $dates_delivery[1][0]);
+			$return = sprintf($this->trans('Approximate date of delivery is between %1$s and %2$s', array(), 'Modules.Dateofdelivery.Shop'), $dates_delivery[0][0], $dates_delivery[1][0]);
 
 		return $return;
 	}
@@ -237,7 +237,7 @@ class DateOfDelivery extends Module
 		if (Tools::isSubmit('submitMoreOptions'))
 		{
 			if (Tools::getValue('date_format') == '' OR !Validate::isCleanHtml(Tools::getValue('date_format')))
-				$errors[] = $this->l('Date format is invalid');
+				$errors[] = $this->trans('Date format is invalid', array(), 'Modules.Dateofdelivery.Admin');
 
 			if (!count($errors))
 			{
@@ -246,7 +246,7 @@ class DateOfDelivery extends Module
 				Configuration::updateValue('DOD_PREPARATION_SATURDAY', (int)Tools::getValue('preparation_day_preparation_saturday'));
 				Configuration::updateValue('DOD_PREPARATION_SUNDAY', (int)Tools::getValue('preparation_day_preparation_sunday'));
 				Configuration::updateValue('DOD_DATE_FORMAT', Tools::getValue('date_format'));
-				$this->_html .= $this->displayConfirmation($this->l('Settings are updated'));
+				$this->_html .= $this->displayConfirmation($this->trans('Settings are updated', array(), 'Modules.Dateofdelivery.Admin'));
 			}
 			else
 				$this->_html .= $this->displayError(implode('<br />', $errors));
@@ -255,13 +255,13 @@ class DateOfDelivery extends Module
 		if (Tools::isSubmit('submitCarrierRule'))
 		{
 			if (!Validate::isUnsignedInt(Tools::getValue('minimal_time')))
-				$errors[] = $this->l('Minimum time is invalid');
+				$errors[] = $this->trans('Minimum time is invalid', array(), 'Modules.Dateofdelivery.Admin');
 			if (!Validate::isUnsignedInt(Tools::getValue('maximal_time')))
-				$errors[] = $this->l('Maximum time is invalid');
+				$errors[] = $this->trans('Maximum time is invalid', array(), 'Modules.Dateofdelivery.Admin');
 			if (($carrier = new Carrier((int)Tools::getValue('id_carrier'))) AND !Validate::isLoadedObject($carrier))
-				$errors[] = $this->l('Carrier is invalid');
+				$errors[] = $this->trans('Carrier is invalid', array(), 'Modules.Dateofdelivery.Admin');
 			if ($this->_isAlreadyDefinedForCarrier((int)($carrier->id), (int)(Tools::getValue('id_carrier_rule', 0))))
-				$errors[] = $this->l('This rule has already been defined for this carrier.');
+				$errors[] = $this->trans('This rule has already been defined for this carrier.', array(), 'Modules.Dateofdelivery.Admin');
 
 			if (!count($errors))
 			{
@@ -273,7 +273,7 @@ class DateOfDelivery extends Module
 					'))
 						Tools::redirectAdmin(AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&confirmAddCarrierRule');
 					else
-						$this->_html .= $this->displayError($this->l('An error occurred on adding of carrier rule.'));
+						$this->_html .= $this->displayError($this->trans('An error occurred on adding of carrier rule.', array(), 'Modules.Dateofdelivery.Admin'));
 				}
 				else
 				{
@@ -284,7 +284,7 @@ class DateOfDelivery extends Module
 					))
 						Tools::redirectAdmin(AdminController::$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&confirmupdatedateofdelivery');
 					else
-						$this->_html .= $this->displayError($this->l('An error occurred on updating of carrier rule.'));
+						$this->_html .= $this->displayError($this->trans('An error occurred on updating of carrier rule.', array(), 'Modules.Dateofdelivery.Admin'));
 				}
 
 			}
@@ -295,14 +295,14 @@ class DateOfDelivery extends Module
 		if (Tools::isSubmit('deletedateofdelivery') && Tools::isSubmit('id_carrier_rule') && (int)Tools::getValue('id_carrier_rule') && $this->_isCarrierRuleExists((int)Tools::getValue('id_carrier_rule')))
 		{
 			$this->_deleteByIdCarrierRule((int)Tools::getValue('id_carrier_rule'));
-			$this->_html .= $this->displayConfirmation($this->l('Carrier rule deleted successfully'));
+			$this->_html .= $this->displayConfirmation($this->trans('Carrier rule deleted successfully', array(), 'Modules.Dateofdelivery.Admin'));
 		}
 
 		if (Tools::isSubmit('confirmAddCarrierRule'))
-			$this->_html = $this->displayConfirmation($this->l('Carrier rule added successfully'));
+			$this->_html = $this->displayConfirmation($this->trans('Carrier rule added successfully', array(), 'Modules.Dateofdelivery.Admin'));
 
 		if (Tools::isSubmit('confirmupdatedateofdelivery'))
-			$this->_html = $this->displayConfirmation($this->l('Carrier rule updated successfully'));
+			$this->_html = $this->displayConfirmation($this->trans('Carrier rule updated successfully', array(), 'Modules.Dateofdelivery.Admin'));
 	}
 
 	protected function _getCarrierRulesWithCarrierName()
@@ -507,25 +507,25 @@ class DateOfDelivery extends Module
 		$fields_form = array(
 			'form' => array(
 				'legend' => array(
-					'title' => $this->l('Settings'),
+					'title' => $this->trans('Settings', array(), 'Admin.Global'),
 					'icon' => 'icon-cogs'
 				),
 				'input' => array(
 					array(
 						'type' => 'text',
-						'label' => $this->l('Extra time when a product is out of stock'),
+						'label' => $this->trans('Extra time when a product is out of stock', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'extra_time_product_oos',
-						'suffix' => $this->l('day(s)'),
+						'suffix' => $this->trans('day(s)', array(), 'Modules.Dateofdelivery.Admin'),
 						),
 					array(
 						'type' => 'text',
-						'label' => $this->l('Extra time for preparation of the order'),
+						'label' => $this->trans('Extra time for preparation of the order', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'extra_time_preparation',
-						'suffix' => $this->l('day(s)'),
+						'suffix' => $this->trans('day(s)', array(), 'Modules.Dateofdelivery.Admin'),
 						),
 					array(
 						'type' => 'checkbox',
-						'label' => $this->l('Preparation option'),
+						'label' => $this->trans('Preparation option', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'preparation_day',
 						'values' => array(
 							'id' => 'id',
@@ -533,12 +533,12 @@ class DateOfDelivery extends Module
 							'query' => array(
 								array(
 									'id' => 'preparation_saturday',
-									'name' => $this->l('Saturday preparation'),
+									'name' => $this->trans('Saturday preparation', array(), 'Modules.Dateofdelivery.Admin'),
 									'val' => 1
 								),
 								array(
 									'id' => 'preparation_sunday',
-									'name' => $this->l('Sunday preparation'),
+									'name' => $this->trans('Sunday preparation', array(), 'Modules.Dateofdelivery.Admin'),
 									'val' => 1
 								),
 							),
@@ -546,13 +546,13 @@ class DateOfDelivery extends Module
 					),
 					array(
 						'type' => 'text',
-						'label' => $this->l('Date format:'),
+						'label' => $this->trans('Date format:'),
 						'name' => 'date_format',
-						'desc' => $this->l('You can see all parameters available at:').' <a href="http://www.php.net/manual/en/function.date.php">http://www.php.net/manual/en/function.date.php</a>',
-						),
+						'desc' => $this->trans('You can see all parameters available at:').' <a href="http://www.php.net/manual/en/function.date.php">http://www.php.net/manual/en/function.date.php</a>',
+						, array(), 'Modules.Dateofdelivery.Admin'),
 				),
 			'submit' => array(
-				'title' => $this->l('Save'),
+				'title' => $this->trans('Save', array(), 'Admin.Actions'),
 				'class' => 'btn btn-default pull-right')
 			),
 		);
@@ -588,13 +588,13 @@ class DateOfDelivery extends Module
 		$fields_form = array(
 			'form' => array(
 				'legend' => array(
-					'title' => $this->l('Settings'),
+					'title' => $this->trans('Settings', array(), 'Admin.Global'),
 					'icon' => 'icon-cogs'
 				),
 				'input' => array(
 						array(
 						'type' => 'select',
-						'label' => $this->l('Carrier :'),
+						'label' => $this->trans('Carrier :', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'id_carrier',
 						'options' => array(
 							'query' => $carriers,
@@ -604,19 +604,19 @@ class DateOfDelivery extends Module
 					),
 					array(
 						'type' => 'text',
-						'label' => $this->l('Delivery between'),
+						'label' => $this->trans('Delivery between', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'minimal_time',
-						'suffix' => $this->l('day(s)'),
+						'suffix' => $this->trans('day(s)', array(), 'Modules.Dateofdelivery.Admin'),
 						),
 					array(
 						'type' => 'text',
-						'label' => $this->l(''),
+						'label' => '',
 						'name' => 'maximal_time',
-						'suffix' => $this->l('day(s)'),
+						'suffix' => $this->trans('day(s)', array(), 'Modules.Dateofdelivery.Admin'),
 						),
 					array(
 						'type' => 'checkbox',
-						'label' => $this->l('Delivery option'),
+						'label' => $this->trans('Delivery option', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'preparation_day',
 						'values' => array(
 							'id' => 'id',
@@ -624,12 +624,12 @@ class DateOfDelivery extends Module
 							'query' => array(
 								array(
 									'id' => 'delivery_saturday',
-									'name' => $this->l('Delivery on Saturday'),
+									'name' => $this->trans('Delivery on Saturday', array(), 'Modules.Dateofdelivery.Admin'),
 									'val' => 1
 								),
 								array(
 									'id' => 'delivery_sunday',
-									'name' => $this->l('Delivery on Sunday'),
+									'name' => $this->trans('Delivery on Sunday', array(), 'Modules.Dateofdelivery.Admin'),
 									'val' => 1
 								),
 							),
@@ -637,7 +637,7 @@ class DateOfDelivery extends Module
 					)
 				),
 			'submit' => array(
-				'title' => $this->l('Save'),
+				'title' => $this->trans('Save', array(), 'Admin.Actions'),
 				'class' => 'btn btn-default pull-right',
 				'name' => 'submitCarrierRule',
 				)
@@ -716,21 +716,21 @@ class DateOfDelivery extends Module
 
 		$fields_list = array(
 			'name' => array(
-				'title' => $this->l('Name of carrier'),
+				'title' => $this->trans('Name of carrier', array(), 'Modules.Dateofdelivery.Admin'),
 				'type' => 'text',
 			),
 			'delivery_between' => array(
-				'title' => $this->l('Delivery between'),
+				'title' => $this->trans('Delivery between', array(), 'Modules.Dateofdelivery.Admin'),
 				'type' => 'text',
 			),
 			'delivery_saturday' => array(
-				'title' => $this->l('Saturday delivery'),
+				'title' => $this->trans('Saturday delivery', array(), 'Modules.Dateofdelivery.Admin'),
 				'type' => 'bool',
 				'align' => 'center',
 				'active' => 'saturdaystatus',
 			),
 			'delivery_sunday' => array(
-				'title' => $this->l('Sunday delivery'),
+				'title' => $this->trans('Sunday delivery', array(), 'Modules.Dateofdelivery.Admin'),
 				'type' => 'bool',
 				'align' => 'center',
 				'active' => 'sundaystatus',
@@ -742,7 +742,7 @@ class DateOfDelivery extends Module
 		{
 			if (!$val['name'])
 				$list[$key]['name'] = Configuration::get('PS_SHOP_NAME');
-			$list[$key]['delivery_between'] = sprintf($this->l('%1$d day(s) and %2$d day(s)'), $val['minimal_time'], $val['maximal_time']);
+			$list[$key]['delivery_between'] = sprintf($this->trans('%1$d day(s) and %2$d day(s)', array(), 'Modules.Dateofdelivery.Admin'), $val['minimal_time'], $val['maximal_time']);
 		}
 
 		$helper = new HelperList();
@@ -752,7 +752,7 @@ class DateOfDelivery extends Module
 		$helper->actions = array('edit', 'delete');
 		$helper->show_toolbar = false;
 
-		$helper->title = $this->l('Link list');
+		$helper->title = $this->trans('Link list', array(), 'Modules.Dateofdelivery.Admin');
 		$helper->table = $this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
