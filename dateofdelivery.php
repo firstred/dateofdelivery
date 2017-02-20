@@ -547,15 +547,19 @@ class DateOfDelivery extends Module
 					),
 					array(
 						'type' => 'text',
-						'label' => $this->trans('Date format:'),
+						'label' => $this->trans('Date format:', array(), 'Modules.Dateofdelivery.Admin'),
 						'name' => 'date_format',
-						'desc' => $this->trans('You can see all parameters available at:').' <a href="http://www.php.net/manual/en/function.date.php">http://www.php.net/manual/en/function.date.php</a>',
-						, array(), 'Modules.Dateofdelivery.Admin'),
+						'desc' => $this->trans('You can see all parameters available at: %site%',
+						array(
+							'%site%' => '<a href="http://www.php.net/manual/en/function.date.php">http://www.php.net/manual/en/function.date.php</a>'
+						), 'Modules.Dateofdelivery.Admin'),
+					)
 				),
-			'submit' => array(
-				'title' => $this->trans('Save', array(), 'Admin.Actions'),
-				'class' => 'btn btn-default pull-right')
-			),
+				'submit' => array(
+					'title' => $this->trans('Save', array(), 'Admin.Actions'),
+					'class' => 'btn btn-default pull-right',
+				),
+			)
 		);
 
 		$helper = new HelperForm();
