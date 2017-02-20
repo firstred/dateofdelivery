@@ -80,12 +80,12 @@
 	<br />
 	<p id="dateofdelivery">
 		{if $nbPackages <= 1}
-			{l s='Approximate date of delivery with this carrier is between' mod='dateofdelivery'}
+			{l s='Approximate date of delivery with this carrier is between' d='Modules.Dateofdelivery.Shop'}
 		{else}
-			{l s='There are %s packages, that will be approximately delivered with the delivery option you choose between' sprintf=$nbPackages mod='dateofdelivery'}
+			{l s='There are %s packages, that will be approximately delivered with the delivery option you choose between' sprintf=$nbPackages d='Modules.Dateofdelivery.Shop'}
 		{/if}
-			<span id="minimal"></span> {l s='and' mod='dateofdelivery'} <span id="maximal"></span> <sup>*</sup>
+			<span id="minimal"></span> {l s='and' d='Modules.Dateofdelivery.Shop'} <span id="maximal"></span> <sup>*</sup>
 		<br />
-		<span style="font-size:10px;margin:0;padding:0;"><sup>*</sup> {l s='with direct payment methods (e.g. credit card)' mod='dateofdelivery'}</span>
+		<span style="font-size:10px;margin:0;padding:0;"><sup>*</sup> {l s='with direct payment methods (e.g. credit card)' d='Modules.Dateofdelivery.Shop'}</span>
 	</p>
 {/if}
