@@ -28,7 +28,33 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-function upgrade_module_1_4($object)
+/**
+ * Class DateofdeliveryAjaxModuleFrontController
+ */
+class DateofdeliveryAjaxModuleFrontController extends ModuleFrontController
 {
-    return $object->registerHook('actionCarrierUpdate');
+    /** @var DateOfDelivery $module */
+    public $module;
+
+    /**
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
+    public function initContent()
+    {
+        parent::initContent();
+        @ob_clean();
+        header('Content-Type: application/json;charset=UTF-8');
+
+        $cart = $this->context->cart;
+        if (!$cart->id_carrier) {
+            die(json_encode(['success' => false]));
+        }
+
+        $this->context->smarty->assign(['dateofdeliveryAjax' => true]);
+        die(json_encode([
+            'success' => true,
+            'html' => $this->module->hookDisplayBeforeCarrier(['cart' => $cart]),
+        ]));
+    }
 }
